@@ -1,0 +1,59 @@
+[package]
+name = "shannonsprism"
+version = "1.0.0"
+edition = "2021"
+description = "ShannonsPrism: measure a file against dozens of compression codecs and report its structure. What shrinks it, what only looks like it does, and where the interesting bytes are."
+license = "GPL-2.0-or-later"
+readme = "README.md"
+keywords = ["compression", "entropy", "firmware", "reverse-engineering", "elf"]
+categories = ["command-line-utilities", "compression"]
+
+[[bin]]
+name = "sprism"
+path = "src/main.rs"
+
+[dependencies]
+bzip3 = { version = "0.13", features = ["bundled"] }
+rayon = "1.10"
+clap = { version = "4", features = ["derive"] }
+flate2 = "1.1"
+zopfli = "0.8"
+bzip2 = "0.6"
+xz2 = "0.1"
+zstd = "0.14"
+brotli = "9"
+lz4_flex = "0.14"
+snap = "1.1"
+ppmd-rust = "1.5"
+object = { version = "0.40", default-features = false, features = ["read", "std"] }
+weezl = "0.2.1"
+libdeflater = "1.26.1"
+lzo1x = "0.2.2"
+infer = "0.22.0"
+density-rs = "0.16.6"
+lzfse = "0.2.0"
+quicklz = "0.3.1"
+lzf-rust = "0.1.0"
+lzav = "0.1.1"
+lzjb = "0.2.0"
+brieflz = "0.2.0"
+lzham-sys = { version = "0.1.1", features = ["static"] }
+lzrw = "0.1.0"
+lzrw-sys = "0.1.0"
+
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+strip = true
+
+[lib]
+name = "sprism"
+path = "src/lib.rs"
+
+[build-dependencies]
+cc = "1.5.1"
+
+[patch.crates-io]
+lzham-sys = { path = "vendor/lzham-sys" }
+lzrw-sys = { path = "vendor/lzrw-sys" }

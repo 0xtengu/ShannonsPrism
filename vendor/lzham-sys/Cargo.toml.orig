@@ -1,0 +1,25 @@
+[package]
+name = "lzham-sys"
+version = "0.1.1"
+authors = ["AriusX7 <icyligii@gmail.com>"]
+readme = "README.md"
+edition = "2018"
+license = "MIT"
+description = "Low level FFI-bindings for the lzham codec."
+keywords = ["lzham", "compression"]
+categories = ["api-bindings", "compression"]
+repository = "https://github.com/AriusX7/lzham-sys"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[build-dependencies]
+cmake = "0.1.44"
+
+[build-dependencies.bindgen]
+version = "0.55.1"
+optional = true
+
+[features]
+generate_binding = ["bindgen"]
+static = []
+dynamic = []

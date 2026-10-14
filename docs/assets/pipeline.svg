@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="560" viewBox="0 0 1200 560" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace" font-size="13">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6e7681"/>
+    </marker>
+    <linearGradient id="heat" x1="0" x2="1">
+      <stop offset="0" stop-color="#3d6fd8"/><stop offset="0.45" stop-color="#2fb9a9"/><stop offset="0.8" stop-color="#e3a72f"/><stop offset="1" stop-color="#f0574a"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="560" rx="18" fill="#0f141b" stroke="#2a313c"/>
+  <text x="32" y="40" font-size="15" fill="#f0f6fc" font-weight="bold">How entropy reads a file</text>
+  <text x="32" y="60" fill="#6e7681">one pass, four stages; nothing is reported that did not round-trip</text>
+
+  <!-- stage 1: input -->
+  <g>
+    <rect x="32" y="96" width="220" height="150" rx="10" fill="#161c25" stroke="#2a313c"/>
+    <text x="48" y="122" fill="#79c0ff" font-weight="bold">1  INPUT</text>
+    <text x="48" y="148" fill="#d0d7de">firmware.bin</text>
+    <text x="48" y="166" fill="#6e7681">any file, or a directory</text>
+    <text x="48" y="196" fill="#d0d7de">container parsed when</text>
+    <text x="48" y="212" fill="#d0d7de">present:</text>
+    <text x="48" y="232" fill="#bc8cff">ELF · PE · COFF · Mach-O</text>
+  </g>
+  <line x1="252" y1="171" x2="300" y2="171" stroke="#6e7681" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- stage 2: entropy map -->
+  <g>
+    <rect x="302" y="96" width="260" height="150" rx="10" fill="#161c25" stroke="#2a313c"/>
+    <text x="318" y="122" fill="#79c0ff" font-weight="bold">2  ENTROPY MAP</text>
+    <text x="318" y="146" fill="#6e7681">sliding window, 64 B per block</text>
+    <rect x="318" y="156" width="228" height="14" rx="3" fill="url(#heat)"/>
+    <text x="318" y="190" fill="#d0d7de">blocks coalesce into regions:</text>
+    <text x="318" y="208" fill="#6e7681">padding</text>
+    <text x="378" y="208" fill="#79c0ff">structured</text>
+    <text x="462" y="208" fill="#39c5cf">code/text</text>
+    <text x="318" y="226" fill="#d29922">compressed</text>
+    <text x="406" y="226" fill="#f85149">packed</text>
+    <text x="462" y="226" fill="#bc8cff">encrypted</text>
+    <text x="318" y="242" fill="#6e7681" font-size="11">chi-square splits the last two</text>
+  </g>
+  <line x1="562" y1="171" x2="610" y2="171" stroke="#6e7681" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- stage 3: sweep -->
+  <g>
+    <rect x="612" y="96" width="300" height="150" rx="10" fill="#161c25" stroke="#2a313c"/>
+    <text x="628" y="122" fill="#79c0ff" font-weight="bold">3  CODEC SWEEP</text>
+    <text x="628" y="146" fill="#d0d7de">83 codecs, whole file or per piece</text>
+    <text x="628" y="168" fill="#6e7681">encode</text>
+    <text x="680" y="168" fill="#6e7681">→</text>
+    <text x="696" y="168" fill="#6e7681">decode</text>
+    <text x="748" y="168" fill="#6e7681">→</text>
+    <text x="764" y="168" fill="#3fb950">== input ?</text>
+    <text x="628" y="190" fill="#d0d7de">ranked by infoR = size × H</text>
+    <rect x="628" y="204" width="34" height="20" rx="5" fill="#1a2a1e" stroke="#3fb950"/><text x="645" y="218" fill="#3fb950" text-anchor="middle" font-size="11">hit</text>
+    <rect x="668" y="204" width="54" height="20" rx="5" fill="#2a2416" stroke="#d29922"/><text x="695" y="218" fill="#d29922" text-anchor="middle" font-size="11">over-H</text>
+    <rect x="728" y="204" width="54" height="20" rx="5" fill="#16202e" stroke="#79c0ff"/><text x="755" y="218" fill="#79c0ff" text-anchor="middle" font-size="11">recode</text>
+    <rect x="788" y="204" width="54" height="20" rx="5" fill="#1b1f26" stroke="#6e7681"/><text x="815" y="218" fill="#8b949e" text-anchor="middle" font-size="11">expand</text>
+    <rect x="848" y="204" width="54" height="20" rx="5" fill="#2c1717" stroke="#f85149"/><text x="875" y="218" fill="#f85149" text-anchor="middle" font-size="11">BROKEN</text>
+    <text x="628" y="240" fill="#6e7681" font-size="11">library decoders run under catch_unwind</text>
+  </g>
+  <line x1="912" y1="171" x2="960" y2="171" stroke="#6e7681" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- stage 4: outputs -->
+  <g>
+    <rect x="962" y="96" width="206" height="150" rx="10" fill="#161c25" stroke="#2a313c"/>
+    <text x="978" y="122" fill="#79c0ff" font-weight="bold">4  OUTPUT</text>
+    <text x="978" y="146" fill="#d0d7de">table</text><text x="1150" y="146" fill="#6e7681" text-anchor="end">default</text>
+    <text x="978" y="166" fill="#d0d7de">.epk package</text><text x="1150" y="166" fill="#6e7681" text-anchor="end">--pack</text>
+    <text x="978" y="186" fill="#d0d7de">C unpacker</text><text x="1150" y="186" fill="#6e7681" text-anchor="end">--emit-c</text>
+    <text x="978" y="206" fill="#d0d7de">payloads</text><text x="1150" y="206" fill="#6e7681" text-anchor="end">--carve --out</text>
+    <text x="978" y="226" fill="#d0d7de">JSON</text><text x="1150" y="226" fill="#6e7681" text-anchor="end">--json</text>
+  </g>
+
+  <!-- branches below the map -->
+  <path d="M432,246 L432,290" stroke="#6e7681" stroke-width="1.5" marker-end="url(#arr)"/>
+  <path d="M120,246 L120,290" stroke="#6e7681" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <g>
+    <rect x="32" y="292" width="280" height="136" rx="10" fill="#161c25" stroke="#2a313c"/>
+    <text x="48" y="318" fill="#bc8cff" font-weight="bold">--sections</text>
+    <text x="48" y="342" fill="#d0d7de">split along the section table;</text>
+    <text x="48" y="360" fill="#d0d7de">every piece and every gap swept</text>
+    <text x="48" y="378" fill="#d0d7de">on its own, then per-section</text>
+    <text x="48" y="396" fill="#d0d7de">packing vs one blob</text>
+  </g>
+  <g>
+    <rect x="332" y="292" width="300" height="136" rx="10" fill="#161c25" stroke="#2a313c"/>
+    <text x="348" y="318" fill="#d29922" font-weight="bold">--carve</text>
+    <text x="348" y="342" fill="#d0d7de">high-entropy regions searched for</text>
+    <text x="348" y="360" fill="#d29922">zlib gzip xz zstd lz4 bzip2</text>
+    <text x="348" y="378" fill="#d0d7de">headers; lzma and raw deflate</text>
+    <text x="348" y="396" fill="#d0d7de">probed blind where entropy steps up;</text>
+    <text x="348" y="414" fill="#d0d7de">each payload is carved once more</text>
+  </g>
+  <g>
+    <rect x="652" y="292" width="260" height="136" rx="10" fill="#161c25" stroke="#2a313c"/>
+    <text x="668" y="318" fill="#39c5cf" font-weight="bold">--at OFFSET</text>
+    <text x="668" y="342" fill="#d0d7de">hex dump, entropy profile and</text>
+    <text x="668" y="360" fill="#d0d7de">best codec for one range;</text>
+    <text x="668" y="378" fill="#d0d7de">the map prints these offsets</text>
+    <text x="668" y="396" fill="#d0d7de">for every region worth a look</text>
+  </g>
+  <g>
+    <rect x="932" y="292" width="236" height="136" rx="10" fill="#161c25" stroke="#2a313c"/>
+    <text x="948" y="318" fill="#3fb950" font-weight="bold">DIRECTORY</text>
+    <text x="948" y="342" fill="#d0d7de">every file scored and ranked</text>
+    <text x="948" y="360" fill="#d0d7de">by how random it looks, so</text>
+    <text x="948" y="378" fill="#d0d7de">keys, blobs and unexplained</text>
+    <text x="948" y="396" fill="#d0d7de">high-entropy files rise to</text>
+    <text x="948" y="414" fill="#d0d7de">the top</text>
+  </g>
+  <path d="M782,246 L782,290" stroke="#6e7681" stroke-width="1.5" marker-end="url(#arr)"/>
+  <path d="M1050,246 L1050,290" stroke="#6e7681" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- footer: guarantees -->
+  <rect x="32" y="452" width="1136" height="90" rx="10" fill="#0b1016" stroke="#2a313c" stroke-dasharray="4 3"/>
+  <text x="48" y="478" fill="#3fb950" font-weight="bold">Invariants</text>
+  <text x="48" y="502" fill="#d0d7de">decode(encode(x)) == x before any row counts   ·   .epk and C output are written only after byte-for-byte reconstruction</text>
+  <text x="48" y="524" fill="#d0d7de">the emitted C verifies an FNV-1a checksum and fails rather than return wrong bytes   ·   every length in .epk is checked against the bytes present</text>
+</svg>

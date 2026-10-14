@@ -1,0 +1,23 @@
+[package]
+name = "lzrw-sys"
+version = "0.1.0"
+edition = "2024"
+description = "Raw FFI bindings to the LZRW family of lossless data-compression algorithms"
+license = "MIT"
+repository = "https://github.com/saturnkai/lzrw-rs"
+readme = "README.md"
+keywords = ["compression", "lzrw", "lossless", "lz77", "ffi"]
+categories = ["compression", "external-ffi-bindings"]
+links = "lzrw"
+include = [
+    "src/**/*",
+    "lzrw/**/*",
+    "build.rs",
+    "Cargo.toml",
+    "README.md",
+    "LICENSE",
+]
+rust-version = "1.85"
+
+[build-dependencies]
+cc = "1.2.66"
